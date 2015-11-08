@@ -1,0 +1,30 @@
+<script type="text/x-kendo-template" id="tmplUser">
+	<div class="user" #if(!active){#style="display: none"#}#>
+		<div class="name">#:name#</div> 
+		<div class="vote" data-bind="visible: bAllVoted">
+			#:vote#
+		</div>
+		<div class="vote" data-bind="invisible: bAllVoted">
+			#if (vote) {#?#} else {#...#}#
+		</div>
+	</div>
+</script>
+<div id="cardwrapper">
+	<div id="card">
+		<textarea id="description" class="k-textbox" placeholder="Enter backlog item text here..."
+			data-bind="value: sDescription, events: { change: description_change }" />
+		<button data-role="button" 
+			data-bind="click: vote_click">Vote!</button>
+		<input id="vote" class="k-textbox" placeholder="Vote here!"
+			data-role="numerictextbox" data-spinners="false" data-decimals="0" data-bind="value: iVote" />
+	</div>
+</div>
+<div id="userlist" data-role="listview" 
+	data-bind="source: aUsers, events: { dataBound: list_change }" data-template="tmplUser"></div>
+<div id="adduser" data-role="window" data-visible="false" data-modal="true" data-title="Profile">
+		<input class="k-textbox" data-bind="value: sUserName" placeholder="Enter your name here..." maxlength="12" />
+		<br/>
+		<span class="voting">Are you voting?:</span><input class="checkbox" type="checkbox" data-bind="checked: bUserActive" />
+		<br/>
+		<button data-role="button" data-bind="click: adduser_click">Join Room</button>
+</div>

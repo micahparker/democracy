@@ -1,0 +1,115 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.k-fx-end {
+  overflow: visible !important;
+  height: 100%;
+}
+
+#create {
+  width: 200px;
+  height: 100px;
+
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+}
+
+#cardwrapper {
+  width: 100%;
+  z-index: 1000;
+}
+
+#card {
+  width: 300px;
+  font-size: 20px;
+  border: 0;
+  margin: auto;
+  padding-top: 20px;
+}
+
+#card #description {
+  width:100%;
+  height: 200px;
+}
+
+#card .k-numerictextbox {
+  width: 235px;
+  height: 50px;
+  font-size:24px;
+  border: 0;
+  display: block;
+}
+
+#card button {
+  float:right;
+      height: 50px;
+}
+
+#adduser .k-textbox {
+  margin-bottom: 20px;
+}
+
+#adduser .voting {
+  padding-left: 35px;
+}
+
+#adduser .checkbox {
+  float:right;
+}
+
+#adduser button {
+  margin-top: 20px;
+  width: 100%;
+}
+
+#userlist {
+	width: 100%;
+  height: 400px;
+  margin-top: 20px;
+  border: 0;
+  background: none;
+  text-align: center;
+}
+
+.user {
+  display: inline-block;
+  padding: 10px;
+  background: gray;
+  color: white;
+  margin: 20px;
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  text-align: center;
+  position: relative;
+}
+
+.user .name {
+  padding-top: 20px;
+}
+
+.user .vote {
+  width: 100px;
+  height: 30px;
+  font-size: 50px;
+  
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+  vertical-align: bottom;
+  text-align: center;
+}
