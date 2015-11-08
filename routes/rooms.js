@@ -78,7 +78,7 @@ router.put('/:name', function(req, res, next) {
 		}
 		//wipe all vodes
 		for (var x=0; x < room.users.length; x++) {
-			room.users.vote = null;
+			room.users[x].vote = null;
 		}
 		//post to socket
 		socket.clients.forEach(function (client) {

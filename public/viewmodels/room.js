@@ -34,8 +34,15 @@ define(
 					//socket isnt working, so lets just poll
 					this._interval = setInterval(function () {
 						repo.read(self._room).then(function (room) {
-							self.set("sDescription", room.description);
+							//update users
 							self.set("aUsers", room.users);
+							//update room?
+							if (room.description != self.get("sDescription")) {
+								self._incoming({
+									action: "updateRoom",
+									data: room
+								})
+							}
 							//check votes!
 							self._checkVotes();
 						})
@@ -83,7 +90,7 @@ define(
 						var user = msg.data;
 						this.get("aUsers").push($.extend(user,{ vote: null }));
 						break;
-					case "updateUserUser":
+					case "updateUser":
 						$.each(this.get("aUsers"), function (idx, user) {
 							if (user.id === msg.data.id) {
 								for (var key in msg.data) {
