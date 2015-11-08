@@ -24,24 +24,30 @@ define(
 				this._node = node;
 				this._room = args.n;
 				//connect to socket!
-				this._socket = new WebSocket("ws://"+location.host.split(":")[0]+":3001/socket?n="+this._room);
-				this._socket.onmessage = function(_msg){
-					self._incoming(JSON.parse(_msg.data));
+				if (false) {
+					this._socket = new WebSocket("ws://"+location.host.split(":")[0]+":3001/socket?n="+this._room);
+					this._socket.onmessage = function(_msg){
+						self._incoming(JSON.parse(_msg.data));
+					}
 				}
-				
+				else {
+					//socket isnt working, so lets just poll
+					this._interval = setInterval(function () {
+						repo.read(self._room).then(function (room) {
+							self.set("sDescription", room.description);
+							self.set("aUsers", room.users);
+							//check votes!
+							self._checkVotes();
+						})
+					}, 3000);
+				}
 				return $.when(
 					//get room
 					repo.read(this._room).then(function(room) {
 						self.set("sDescription", room.description);
 						self.set("aUsers", room.users);
-						//check for all votes
-						var allVoted = room.users.length > 0;
-						$.each(room.users, function (idx, user) {
-							if (user.active && !user.vote) {
-								allVoted = false;
-							}
-						});
-						self.set("bAllVoted", allVoted);
+						//check votes!
+						self._checkVotes();
 					}),
 					//ask for name
 					repo.readUser(this._room).then(function (user) {
@@ -98,14 +104,24 @@ define(
 							if (user.id === msg.data.id) {
 								user.set("vote",msg.data.vote);
 							}
-							if (user.active && !user.vote) {
-								allVoted = false;
-							}
 						});
 						aUsers.trigger("change");
-						this.set("bAllVoted", allVoted);
+						//check votes!
+						self._checkVotes();
 						break;
 				}
+			},
+			
+			_checkVotes: function () {
+				var users = this.get("aUsers");
+				//check for all votes
+				var allVoted = users.length > 0;
+				$.each(users, function (idx, user) {
+					if (user.active && !user.vote) {
+						allVoted = false;
+					}
+				});
+				this.set("bAllVoted", allVoted);	
 			},
 			
 			description_change: function () {
