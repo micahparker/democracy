@@ -1,11 +1,11 @@
 define(
 	[
-		'jquery','kendo',
+		'jquery','kendo', "socket.io",
 		'model/RoomRepository',
 		'_kendo/kendo.listview.min', '_kendo/kendo.window.min',
 		'_kendo/kendo.button.min', '_kendo/kendo.numerictextbox.min'
 	], 
-	function ($,kendo,repo) {
+	function ($,kendo,io, repo) {
 		return {
 			sDescription: "",
 			sUserName: "",
@@ -22,13 +22,15 @@ define(
 				var self = this;
 				//set vars
 				this._node = node;
-				this._room = args.n;
+                this._room = args.n;
+                //reset url to clean
+                window.app.replace(args.n);
 				//connect to socket!
-				if (false) {
-					this._socket = new WebSocket("ws://"+location.host.split(":")[0]+":3001/socket?n="+this._room);
-					this._socket.onmessage = function(_msg){
-						self._incoming(JSON.parse(_msg.data));
-					}
+				if (true) {
+					this._socket = io("//"+location.host.split(":")[0]+":3001/"+this._room);
+                    this._socket.on("action", function (msg) { 
+                        self._incoming(JSON.parse(msg));
+                    })
 				}
 				else {
 					//socket isnt working, so lets just poll
@@ -114,7 +116,7 @@ define(
 						});
 						aUsers.trigger("change");
 						//check votes!
-						self._checkVotes();
+						this._checkVotes();
 						break;
 				}
 			},

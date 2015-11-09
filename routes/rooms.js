@@ -1,5 +1,6 @@
 /* global socket */
 /* global _Data */
+/* global _IO */
 var express = require('express');
 var router = express.Router();
 var uuid = require('node-uuid');
@@ -80,18 +81,15 @@ router.put('/:name', function(req, res, next) {
 		for (var x=0; x < room.users.length; x++) {
 			room.users[x].vote = null;
 		}
-		//post to socket
-		socket.clients.forEach(function (client) {
-			if (_isRoomMatch(client, room)) {
-				client.send(JSON.stringify({ 
-					room: room.name, 
-					action: "updateRoom", 
-					data: { 
-						description: room.description 
-					} 
-				}));
-			}
-		});
+        //post to socket
+        _IO.of('/' + room.name).emit("action",JSON.stringify({
+            room: room.name, 
+            action: "updateRoom", 
+            data: {
+                description: room.description
+            }
+        }));
+
 		return ok(res);
 	}
 	return notfound(res);
@@ -109,19 +107,15 @@ router.put('/:name/user', function(req, res, next) {
 				user.name = req.body.active;
 			}
 			//post to socket
-			socket.clients.forEach(function (client) {
-				if (_isRoomMatch(client, room)) {
-					client.send(JSON.stringify({ 
-						room: room.name, 
-						action: "updateUser", 
-						data: { 
-							id: user.id, 
-							name: user.name,
-							active: user.active
-						} 
-					}));
-				}
-			});
+            _IO.of('/' + room.name).emit("action",JSON.stringify({ 
+				room: room.name, 
+				action: "updateUser", 
+				data: { 
+					id: user.id, 
+					name: user.name,
+					active: user.active
+				} 
+			}));
 		}
 		return ok(res);
 	}
@@ -138,7 +132,11 @@ router.post('/', function(req, res, next) {
 	//add to db
   	_Data.Rooms.push(room);
 	//remove an old one
-	_deleteOldRoom();
+    _deleteOldRoom();
+    //create socket
+    _IO.of("/" + room.name).on('connection', function (socket) {
+        socket.emit("hi!");
+    });
 	//return
 	return json(res,room);
 });
@@ -155,19 +153,15 @@ router.post('/:name/user', function(req, res, next) {
 			};
 			room.users.push(user);
 			//post to socket
-			socket.clients.forEach(function (client) {
-				if (_isRoomMatch(client, room)) {
-					client.send(JSON.stringify({ 
-						room: room.name, 
-						action: "addUser", 
-						data: { 
-							id: user.id, 
-							name: user.name,
-							active: user.active
-						} 
-					}));
-				}
-			});
+            _IO.of('/' + room.name).emit("action",JSON.stringify({ 
+				room: room.name, 
+				action: "addUser", 
+				data: { 
+					id: user.id, 
+					name: user.name,
+					active: user.active
+				} 
+			}));
 			//add room to session
 			req.session.room = room.name;
 			//return
@@ -186,18 +180,14 @@ router.post('/:name/vote/:vote', function(req, res, next) {
 			if (vote) {
 				user.vote = vote;
 				//post to socket
-				socket.clients.forEach(function (client) {
-					if (_isRoomMatch(client, room)) {
-						client.send(JSON.stringify({ 
-							room: room.name, 
-							action: "vote", 
-							data: { 
-								id: user.id, 
-								vote: vote 
-							} 
-						}));
-					}
-				});
+                _IO.of('/' + room.name).emit("action",JSON.stringify({ 
+					room: room.name, 
+					action: "vote", 
+					data: { 
+						id: user.id, 
+						vote: vote 
+					} 
+				}));
 				//return
 				return ok(res);
 			}
@@ -213,17 +203,13 @@ router.delete('/:name/user/:id', function(req, res, next) {
 		if (user) {
 			user.active = false;
 			//post to socket
-			socket.clients.forEach(function (client) {
-				if (_isRoomMatch(client, room)) {
-					client.send(JSON.stringify({ 
-						room: room.name, 
-						action: "deleteUser", 
-						data: { 
-							id: user.id 
-						} 
-					}));
-				}
-			});
+            _IO.of('/' + room.name).emit("action",JSON.stringify({ 
+				room: room.name, 
+				action: "deleteUser", 
+				data: { 
+					id: user.id 
+				} 
+			}));
 			//return
 			return ok(res);
 		}

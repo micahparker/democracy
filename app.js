@@ -1,4 +1,5 @@
-/* global socket,_Data */
+/* global _Data */
+/* global _IO */
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -13,7 +14,8 @@ var routes = require('./routes/index');
 var rooms = require('./routes/rooms');
 
 var app = express();
-var websockets = require('express-ws')(express());
+var socket = require('http').Server(app);
+var io = require('socket.io')(socket);
 
 // session setup
 app.use(sessionParser());
@@ -39,12 +41,8 @@ app.use('/', routes);
 app.use('/rooms', rooms);
 
 //websockets
-websockets.app.ws('/socket', function(ws, req) {
-  req.query = url.parse(req.url, true).query;
-  //req.client.room = req.query.n;
-});
-socket = websockets.getWss('/socket');
-websockets.app.listen(3001);
+socket.listen(3001);
+_IO = io;
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
