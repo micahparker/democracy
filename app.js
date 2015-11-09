@@ -1,5 +1,3 @@
-/* global _Data */
-/* global _IO */
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -9,13 +7,12 @@ var sessionParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var uuid = require('node-uuid');
 var url = require('url');
+var loki = require('lokijs');
 
 var routes = require('./routes/index');
-var rooms = require('./routes/rooms');
 
 var app = express();
-var socket = require('http').Server(app);
-var io = require('socket.io')(socket);
+var io = require('socket.io');
 
 // session setup
 app.use(sessionParser());
@@ -36,13 +33,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-//routes
-app.use('/', routes);
-app.use('/rooms', rooms);
+//data storage
+var db = new loki('rooms.json');
 
 //websockets
-socket.listen(3001);
-_IO = io;
+app.io = io();
+
+//routes
+app.use('/', routes);
+app.use('/rooms', require('./routes/rooms')(app.io, db.addCollection("rooms")));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -74,10 +73,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-//setup data storage for app
-_Data = {
-  Rooms: []
-};
 
 module.exports = app;

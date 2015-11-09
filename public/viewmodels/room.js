@@ -5,13 +5,15 @@ define(
 		'_kendo/kendo.listview.min', '_kendo/kendo.window.min',
 		'_kendo/kendo.button.min', '_kendo/kendo.numerictextbox.min'
 	], 
-	function ($,kendo,io, repo) {
-		return {
-			sDescription: "",
-			sUserName: "",
-			bUserActive: true,
-			aUsers: [],
-			iVote: null,
+	function ($,kendo, io, repo) {
+        return {
+            sLink: null,
+            sDescription: "",
+            sUserName: "",
+            bUserActive: true,
+            aUsers: [],
+            iVote: null,
+            iAvg: 0,
 			bAllVoted: false,
 			
 			_node: null,
@@ -22,13 +24,17 @@ define(
 				var self = this;
 				//set vars
 				this._node = node;
-                this._room = args.n;
-                //reset url to clean
-                window.app.replace(args.n);
+                this._room = args.n
+                this.set("sLink", location.href.replace("/#room?n=", "#"));
 				//connect to socket!
 				if (true) {
-					this._socket = io("//"+location.host.split(":")[0]+":3001/"+this._room);
-                    this._socket.on("action", function (msg) { 
+					this._socket = io("//"+location.host+"/"+this._room);
+                    this._socket.on("room", function (msg) {
+                        var room = JSON.parse(msg);
+                        self.set("sDescription", room.description);
+                        self.set("aUsers", room.users);
+                    });
+                    this._socket.on("action", function (msg) {
                         self._incoming(JSON.parse(msg));
                     })
 				}
@@ -86,7 +92,6 @@ define(
 								user.set("vote",null);
 							}
 						});
-						this.set("bAllVoted", false);
 						break;
 					case "addUser":
 						var user = msg.data;
@@ -115,22 +120,29 @@ define(
 							}
 						});
 						aUsers.trigger("change");
-						//check votes!
-						this._checkVotes();
 						break;
-				}
+                }
+                //check votes!
+                this._checkVotes();
 			},
 			
-			_checkVotes: function () {
+            _checkVotes: function () {
+                var sum = 0;
+                var activeUsers = 0;
 				var users = this.get("aUsers");
 				//check for all votes
 				var allVoted = users.length > 0;
 				$.each(users, function (idx, user) {
-					if (user.active && !user.vote) {
-						allVoted = false;
+                    if (user.active) {
+                        sum += user.vote;
+                        if (!user.vote) {
+                            allVoted = false;
+                        }
+                        activeUsers++;
 					}
-				});
-				this.set("bAllVoted", allVoted);	
+                });
+                this.set("iAvg", (activeUsers == 0 ? 0 : (sum / activeUsers)));	
+                this.set("bAllVoted", allVoted);	
 			},
 			
 			description_change: function () {

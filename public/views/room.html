@@ -10,6 +10,7 @@
 	</div>
 </script>
 <div id="cardwrapper">
+    <a data-bind="attr: { href: sLink }, text: sLink"></a>
 	<div id="card">
 		<textarea id="description" class="k-textbox" placeholder="Enter backlog item text here..."
 			data-bind="value: sDescription, events: { change: description_change }" />
@@ -17,6 +18,7 @@
 			data-bind="click: vote_click">Vote!</button>
 		<input id="vote" class="k-textbox" placeholder="Vote here!"
 			data-role="numerictextbox" data-spinners="false" data-decimals="0" data-bind="value: iVote" />
+        <div class="avg" data-bind="visible: bAllVoted">Avg: <span data-bind="text:iAvg"></span></div>
 	</div>
 </div>
 <div id="userlist" data-role="listview" 

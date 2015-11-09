@@ -30,6 +30,11 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 /**
+ * Setup WebSockets
+ */
+app.io.attach(server);
+
+/**
  * Normalize a port into a number, string, or false.
  */
 

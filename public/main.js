@@ -20,7 +20,7 @@ requirejs.config({
 	deps: ["jquery","kendo","mokuso"],
 	callback: function ($,kendo, Mokuso) {
         var _initial = "create";
-		if ($.trim(location.hash).length) {
+		if ($.trim(location.hash).length && location.hash.indexOf("#create") != 0) {
 		    _initial = "room?n="+location.hash.replace("#","");
 		    if (location.hash.indexOf("?n=") > 0) {
 			    _initial = location.hash.replace("#","");
