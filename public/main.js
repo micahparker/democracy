@@ -27,6 +27,11 @@ requirejs.config({
             }
             location.hash = "";
 		}
-		window.app = new Mokuso($("#content"), { initial: _initial });
+		window.app = new Mokuso($("#content"), { 
+			initial: _initial, 
+			init: function () {
+				$("body").removeClass("k-loading");
+			} 
+		});
 	}
 }); 

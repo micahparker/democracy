@@ -1,0 +1,28 @@
+<script type="text/x-kendo-template" id="tmplUser">
+	<div class="user" #if(!active){#style="display: none"#}#>
+		<div class="name">#:name#</div> 
+		<div class="vote" data-bind="visible: bAllVoted">
+			#:vote#
+		</div>
+		<div class="vote" data-bind="invisible: bAllVoted">
+			#if (vote) {#?#} else {#...#}#
+		</div>
+	</div>
+</script>
+<div id="planningpoker">
+	<div id="cardwrapper">
+		<div id="card">
+			<textarea id="description" class="k-textbox" placeholder="Enter backlog item text here..."
+				data-bind="visible: oUser.admin, value: oRoom.description, events: { change: description_change }"></textarea>
+			<div id="description" data-bind="invisible: oUser.admin">
+				<span data-bind="text: oRoom.description"></span>
+			</div>
+			<button data-role="button" 
+				data-bind="visible: oUser.active, click: vote_click">Vote!</button>
+			<input id="vote" class="k-textbox" placeholder="Vote here!"
+				data-role="numerictextbox" data-spinners="false" data-decimals="0" data-bind="visible: oUser.active, value: iVote" />
+			<div class="avg" data-bind="visible: bAllVoted">Avg: <span data-bind="text:iAvg"></span></div>
+		</div>
+	</div>
+	<div id="userlist" data-role="listview" data-bind="source: oRoom.users" data-template="tmplUser"></div>
+</div>

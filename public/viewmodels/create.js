@@ -1,7 +1,7 @@
 define(
 	[
 		'jquery','kendo',
-		'model/RoomRepository', 
+		'model/roomrepository', 
 		'_kendo/kendo.button.min'
 	], 
 	function ($,kendo,repo) {
@@ -14,10 +14,20 @@ define(
 				this._node = node;
 			},
 			
-			create_click: function (e) {
+			create_pp_click: function (e) {
 				var self = this;
 				kendo.ui.progress(this._node, true);
-				repo.create().then(function (room) {
+				repo.create('pp').then(function (room) {
+					window.app.navigate('room?n='+room.name);
+				}).always(function () {
+					kendo.ui.progress(self._node, false);
+				})
+			},
+			
+			create_vm_click: function (e) {
+				var self = this;
+				kendo.ui.progress(this._node, true);
+				repo.create('vm').then(function (room) {
 					window.app.navigate('room?n='+room.name);
 				}).always(function () {
 					kendo.ui.progress(self._node, false);

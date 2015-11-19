@@ -28,61 +28,10 @@ a {
   margin: auto;
 }
 
-#cardwrapper {
-  width: 100%;
-  z-index: 1000;
-  text-align:center;
-}
-
-#card {
-  width: 300px;
-  font-size: 20px;
-  border: 0;
-  margin: auto;
-  margin-top: 20px;
-  box-shadow: gray 0px 3px 5px;
-  position:relative;
-}
-
-#card #description {
-  width:100%;
-  height: 200px;
-}
-
-#card .k-numerictextbox {
-  width: 237px;
-  height: 50px;
-  font-size:24px;
-  border: 0;
-  display: block;
-  height: 48px;
-  border-radius: 0;
-}
-
-#card .k-numerictextbox .k-textbox {
-  height: 48px;
-  border-radius: 0;
-}
-
-#card button {
-  float:right;
-      height: 50px;
-}
-
-#card .avg {
-    position: absolute;
-    bottom: 50px;
-    right: 12px;
-    color: gray;
-}
-
-#card .avg span {
-    font-weight: bold;
-}
-
-#cardwrapper a {
-    font-size: 12px;
-    margin-top: 20px;
+.roomlink {
+    display: block;
+    width: 100%;
+    text-align: center;
 }
 
 #adduser .k-textbox {
@@ -102,7 +51,76 @@ a {
   width: 100%;
 }
 
-#userlist {
+/**** PLANNING POKER ****/
+
+#planningpoker {
+  
+}
+
+#planningpoker #cardwrapper {
+  width: 100%;
+  z-index: 1000;
+  text-align:center;
+}
+
+#planningpoker #card {
+  width: 300px;
+  font-size: 20px;
+  border: 0;
+  margin: auto;
+  margin-top: 20px;
+  box-shadow: gray 0px 3px 5px;
+  position:relative;
+}
+
+#planningpoker #card #description {
+  border: 1px solid lightgrey;
+  width:100%;
+  height: 180px;
+  text-align: left;
+}
+
+#planningpoker #description span {
+  padding: 5px;
+}
+
+#planningpoker #card .k-numerictextbox {
+  width: 237px;
+  height: 50px;
+  font-size:24px;
+  border: 0;
+  display: block;
+  height: 48px;
+  border-radius: 0;
+}
+
+#planningpoker #card .k-numerictextbox .k-textbox {
+  height: 48px;
+  border-radius: 0;
+}
+
+#planningpoker #card button {
+  float:right;
+      height: 50px;
+}
+
+#planningpoker #card .avg {
+    position: absolute;
+    bottom: 50px;
+    right: 12px;
+    color: gray;
+}
+
+#planningpoker #card .avg span {
+    font-weight: bold;
+}
+
+#planningpoker #cardwrapper a {
+    font-size: 12px;
+    margin-top: 20px;
+}
+
+#planningpoker #userlist {
 	width: 100%;
   height: 400px;
   margin-top: 20px;
@@ -111,7 +129,7 @@ a {
   text-align: center;
 }
 
-.user {
+#planningpoker .user {
   display: inline-block;
   padding: 10px;
   background: gray;
@@ -124,11 +142,75 @@ a {
   position: relative;
 }
 
-.user .name {
+#planningpoker .user .name {
   padding-top: 20px;
 }
 
-.user .vote {
+#planningpoker .user .vote {
+  width: 100px;
+  height: 30px;
+  font-size: 50px;
+  
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+  vertical-align: bottom;
+  text-align: center;
+}
+
+/**** VOTE ME ****/
+
+#voteme {
+  
+}
+
+#voteme #description {
+  border: 1px solid lightgrey;
+  width: 100%;
+  height: 80px;
+  margin-top: 20px;
+}
+
+#voteme #description span {
+  padding: 5px;
+}
+
+#voteme #userlist {
+	width: 100%;
+  height: 400px;
+  margin-top: 20px;
+  border: 0;
+  background: none;
+  text-align: center;
+}
+
+#voteme .user {
+  display: inline-block;
+  padding: 10px;
+  background: gray;
+  color: white;
+  margin: 20px;
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+}
+
+#voteme .user.voted {
+  border: 10px solid steelblue;
+}
+
+#voteme .user .name {
+  padding-top: 20px;
+}
+
+#voteme .user .vote {
   width: 100px;
   height: 30px;
   font-size: 50px;

@@ -1,0 +1,14 @@
+<script type="text/x-kendo-template" id="tmplUser">
+	<div id="user_#:id#" class="user" data-bind="click: vote_click" #if(!active){#style="display: none"#}#>
+		<div class="name">#:name#</div> 
+		<div class="vote">#:_total#</div>
+	</div>
+</script>
+<div id="voteme">
+	<textarea id="description" class="k-textbox" placeholder="Enter backlog item text here..."
+				data-bind="visible: oUser.admin, value: oRoom.description, events: { change: description_change }"></textarea>
+	<div id="description" data-bind="invisible: oUser.admin">
+		<span data-bind="text: oRoom.description"></span>
+	</div>
+	<div id="userlist" data-role="listview" data-bind="source: oRoom.users, events: { dataBound: _checkVotes, change: _checkVotes }" data-template="tmplUser"></div>
+</div>

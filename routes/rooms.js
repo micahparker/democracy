@@ -29,7 +29,7 @@ module.exports = function (_IO, _DB) {
         if (room) {
             return json(res, room);
         }
-        else {
+        else if (false) {
             room = repo.createRoom(req.params.name);
             repo.addRoom(room);
             _initIO(room);
@@ -99,8 +99,8 @@ module.exports = function (_IO, _DB) {
         return notfound(res);
     });
     
-    router.post('/', function (req, res, next) {
-        var room = repo.createRoom();
+    router.post('/:type', function (req, res, next) {
+        var room = repo.createRoom(null, req.params.type);
         //add to db
         repo.addRoom(room);
         //initialize a socket namespace
@@ -116,6 +116,7 @@ module.exports = function (_IO, _DB) {
                 var user = {
                     id: req.session.id,
                     name: req.body.name,
+                    admin: room.users.length == 0,
                     vote: null,
                     active: req.body.active != undefined ? req.body.active : true
                 };
@@ -143,8 +144,8 @@ module.exports = function (_IO, _DB) {
         var room = repo.findRoom(req.params.name);
         if (room) {
             var user = repo.findUser(room, req.session.id);
-            if (user) {
-                var vote = parseInt(req.params.vote);
+            if (user && user.active) {
+                var vote = req.params.vote;
                 if (vote) {
                     user.vote = vote;
                     //post to socket

@@ -2,10 +2,11 @@ module.exports = function (_DB) {
     var uuid = require('node-uuid');
     
     return {
-        createRoom: function (name) {
+        createRoom: function (_name, _type) {
             return {
-                name: name || uuid.v4().replace(new RegExp("-", "g"), ""),
+                name: _name || uuid.v4().replace(new RegExp("-", "g"), ""),
                 description: null,
+                type: _type,
                 users: [],
                 lastaccessed: new Date()
             };

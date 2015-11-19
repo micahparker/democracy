@@ -2,9 +2,9 @@ define(
 	['jquery', 'kendo'], 
 	function ($, kendo) {
 		return {
-			create: function () {
+			create: function (_type) {
 				return $.ajax({
-					url: "/rooms",
+					url: "/rooms/"+_type,
 					method: "POST"
 				}).promise();
 			},
