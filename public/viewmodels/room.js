@@ -86,9 +86,7 @@ define(
 						}
 						//clear votes
 						$.each(room.users, function (idx, _user) {
-							if (_user.id === msg.data.id) {
-								_user.set("vote",null);
-							}
+							_user.set("vote",null);
 						});
 						break;
 					case "addUser":

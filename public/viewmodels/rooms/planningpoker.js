@@ -7,7 +7,7 @@ define(
 	function ($,kendo,repo) {
 		return {
 			oRoom: { description: "", users: [] },
-			oUser: { name: "", active: false, vote: null },
+			oUser: { name: "", active: false, fvote: null },
 			
 			iVote: null,
             iAvg: 0,
